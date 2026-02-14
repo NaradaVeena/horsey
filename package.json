@@ -1,0 +1,21 @@
+{
+  "name": "horsey",
+  "version": "1.0.0",
+  "description": "Day trading tracking system 🐴",
+  "main": "cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "trading",
+    "cli",
+    "analytics"
+  ],
+  "author": "NaradaVeena <aivoicehq@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "sqlite3": "^5.1.7",
+    "yahoo-finance2": "^2.14.0"
+  }
+}
