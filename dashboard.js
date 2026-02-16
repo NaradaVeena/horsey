@@ -22,6 +22,7 @@ class HorseyDashboard {
     const todaysWatchlist = await this.db.getWatchlist({ date: 'today' });
     const journal = await this.db.getJournal(today);
     const recentTrades = (await this.db.getTrades({})).slice(0, 20); // Last 20 trades
+    const paperTrades = await this.db.getTrades({ paper: true });
 
     const html = `<!DOCTYPE html>
 <html lang="en">
@@ -305,6 +306,8 @@ class HorseyDashboard {
             ${this.generateJournal(journal)}
             ${this.generateSetupAnalysis(setupAnalysis)}
         </div>
+
+        ${this.generatePaperTrades(paperTrades)}
         
         ${this.generateNav()}
     </div>
@@ -365,7 +368,7 @@ class HorseyDashboard {
       <div class="trade-row">
         <div>
           <div class="ticker">${trade.ticker}</div>
-          <div class="setup-type">${trade.direction} ${trade.instrument} • ${trade.setup_type}</div>
+          <div class="setup-type">${trade.direction} ${trade.size}x ${trade.instrument} • ${trade.setup_type}</div>
         </div>
         <div style="text-align: right;">
           <div class="price mono">$${trade.entry_price.toFixed(2)}</div>
@@ -380,7 +383,7 @@ class HorseyDashboard {
         <div class="trade-row">
           <div>
             <div class="ticker">${trade.ticker}</div>
-            <div class="setup-type">${trade.direction} ${trade.instrument} • ${trade.setup_type}</div>
+            <div class="setup-type">${trade.direction} ${trade.size}x ${trade.instrument} • ${trade.setup_type}</div>
           </div>
           <div style="text-align: right;">
             <div class="pnl ${pnlClass} mono">$${trade.pnl.toFixed(2)}</div>
@@ -497,6 +500,7 @@ class HorseyDashboard {
           <td><span class="ticker">${trade.ticker}</span></td>
           <td>${trade.direction}</td>
           <td>${trade.instrument}</td>
+          <td class="mono">${trade.size}</td>
           <td class="mono">$${trade.entry_price.toFixed(2)}</td>
           <td class="mono">${trade.exit_price ? '$' + trade.exit_price.toFixed(2) : '-'}</td>
           <td class="mono ${pnlClass}">${pnl}</td>
@@ -516,6 +520,7 @@ class HorseyDashboard {
                         <th>Ticker</th>
                         <th>Direction</th>
                         <th>Instrument</th>
+                        <th>Qty</th>
                         <th>Entry</th>
                         <th>Exit</th>
                         <th>P&L</th>
@@ -585,6 +590,88 @@ class HorseyDashboard {
                 </tbody>
             </table>
         </div>
+    </div>`;
+  }
+
+  generatePaperTrades(trades) {
+    if (!trades || trades.length === 0) return '';
+    
+    const closed = trades.filter(t => t.status === 'closed');
+    const open = trades.filter(t => t.status === 'open');
+
+    // Outcome sizing: small = <30% move, big = >30% move
+    function getOutcome(trade) {
+      if (!trade.pnl) return { label: 'OPEN', color: '#888', icon: '⏳' };
+      const pctMove = Math.abs((trade.exit_price - trade.entry_price) / trade.entry_price) * 100;
+      const isWin = trade.pnl > 0;
+      if (isWin && pctMove >= 30) return { label: '', color: '#00ff88', icon: '🟢🟢' };
+      if (isWin) return { label: '', color: '#00cc66', icon: '🟢' };
+      if (!isWin && pctMove >= 30) return { label: '', color: '#ff4444', icon: '🔴🔴' };
+      return { label: '', color: '#cc6644', icon: '🔴' };
+    }
+
+    // Execution grade: good = had thesis + waited for confirmation, bad = chased or no plan
+    function getExecGrade(trade) {
+      const lessons = (trade.lessons || '').toLowerCase();
+      const notes = (trade.notes || '').toLowerCase();
+      if (lessons.includes('didn\'t') || lessons.includes('chased') || lessons.includes('late') || lessons.includes('didn\'t pull')) 
+        return { label: 'POOR', color: '#ff4444' };
+      if (lessons.includes('right read') || lessons.includes('clean') || lessons.includes('patience'))
+        return { label: 'GOOD', color: '#00ff88' };
+      return { label: '—', color: '#888' };
+    }
+
+    const cards = trades.map(trade => {
+      const outcome = getOutcome(trade);
+      const exec = getExecGrade(trade);
+      const entryDate = new Date(trade.entry_time).toLocaleDateString();
+      const notes = trade.notes || '';
+      const lessons = trade.lessons || '';
+      const borderColor = outcome.label === 'OPEN' ? '#444' : outcome.color;
+
+      return `
+        <div style="background: #1a1f2e; border: 1px solid #2a3040; border-radius: 8px; padding: 14px; margin-bottom: 10px; border-left: 3px solid ${borderColor};">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div>
+              <span class="ticker" style="font-size: 1.1em;">${trade.ticker}</span>
+              <span style="color: #888; margin-left: 8px;">${trade.direction.toUpperCase()} ${trade.size}x ${trade.instrument}</span>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 1.1em;">${outcome.icon}</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 20px; font-size: 0.85em; color: #aaa; margin-bottom: 6px;">
+            <span>Entry: <span class="mono">$${trade.entry_price.toFixed(2)}</span></span>
+            <span>Exit: <span class="mono">${trade.exit_price ? '$' + trade.exit_price.toFixed(2) : '—'}</span></span>
+            <span>Setup: ${trade.setup_type}</span>
+            <span>${entryDate}</span>
+          </div>
+          ${notes ? `<div style="font-size: 0.85em; color: #ccc; margin-top: 6px; padding: 6px 8px; background: #141820; border-radius: 4px;">${notes}</div>` : ''}
+          ${lessons ? `<div style="font-size: 0.85em; color: #ffaa00; margin-top: 4px; padding: 6px 8px; background: #1a1810; border-radius: 4px;">💡 ${lessons}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    // Summary: count by outcome type
+    const outcomes = closed.map(getOutcome);
+    const bigGreen = outcomes.filter(o => o.label === 'BIG GREEN').length;
+    const smallGreen = outcomes.filter(o => o.label === 'SMALL GREEN').length;
+    const smallRed = outcomes.filter(o => o.label === 'SMALL RED').length;
+    const bigRed = outcomes.filter(o => o.label === 'BIG RED').length;
+
+    return `
+    <div class="card" style="grid-column: 1 / -1;">
+        <div class="card-header">📝 PAPER TRADES — Execution Muscle</div>
+        <div style="display: flex; gap: 16px; margin-bottom: 14px; font-size: 0.85em; flex-wrap: wrap;">
+          <div style="background: #1a1f2e; padding: 6px 12px; border-radius: 6px;">
+            <span style="color: #888;">Total:</span> <span class="mono">${trades.length}</span>
+            ${open.length > 0 ? `<span style="color: #888; margin-left: 6px;">Open:</span> <span class="mono">${open.length}</span>` : ''}
+          </div>
+          ${bigGreen > 0 ? `<div style="background: #1a1f2e; padding: 6px 12px; border-radius: 6px;">🟢🟢 <span class="mono">${bigGreen}</span></div>` : ''}
+          ${smallGreen > 0 ? `<div style="background: #1a1f2e; padding: 6px 12px; border-radius: 6px;">🟢 <span class="mono">${smallGreen}</span></div>` : ''}
+          ${smallRed > 0 ? `<div style="background: #1a1f2e; padding: 6px 12px; border-radius: 6px;">🔴 <span class="mono">${smallRed}</span></div>` : ''}
+          ${bigRed > 0 ? `<div style="background: #1a1f2e; padding: 6px 12px; border-radius: 6px;">🔴🔴 <span class="mono">${bigRed}</span></div>` : ''}
+        </div>
+        ${cards}
     </div>`;
   }
 

@@ -428,6 +428,74 @@ program
     }
   });
 
+// Paper trades
+const paperCmd = program.command('paper').alias('p').description('Paper trades (muscle building)');
+
+paperCmd
+  .command('open <ticker> <direction> <instrument> <entry_price> <size>')
+  .description('Open a paper trade')
+  .option('--setup <setup>', 'setup type', 'other')
+  .option('--narrative <id>', 'narrative ID', parseInt)
+  .option('--notes <notes>', 'trade notes')
+  .action(async (ticker, direction, instrument, entryPrice, size, options) => {
+    try {
+      const validDirections = ['long', 'short'];
+      const validInstruments = ['shares', 'calls', 'puts', '0dte-calls', '0dte-puts', 'csp'];
+      if (!validDirections.includes(direction)) { console.error('❌ Direction must be: long, short'); return; }
+      if (!validInstruments.includes(instrument)) { console.error('❌ Instrument must be: shares, calls, puts, 0dte-calls, 0dte-puts, csp'); return; }
+      
+      const id = await db.openTrade(ticker, direction, instrument, parseFloat(entryPrice), parseInt(size), {
+        setup: options.setup, narrative: options.narrative, notes: options.notes, paper: true
+      });
+      const mult = instrument === 'shares' ? 1 : 100;
+      console.log(`📝 Paper trade #${id}: ${direction.toUpperCase()} ${ticker.toUpperCase()} ${size}x ${instrument} @ $${entryPrice}`);
+    } catch (error) {
+      console.error('❌ Error:', error.message);
+    }
+  });
+
+paperCmd
+  .command('close <id> <exit_price>')
+  .description('Close a paper trade')
+  .option('--notes <notes>', 'closing notes')
+  .action(async (id, exitPrice, options) => {
+    try {
+      await db.closeTrade(parseInt(id), parseFloat(exitPrice), options);
+      console.log(`📝 Closed paper trade #${id} @ $${exitPrice}`);
+    } catch (error) {
+      console.error('❌ Error:', error.message);
+    }
+  });
+
+paperCmd
+  .command('list')
+  .description('List paper trades')
+  .option('--open', 'show only open')
+  .action(async (options) => {
+    try {
+      const trades = await db.getTrades({ ...options, paper: true });
+      if (trades.length === 0) { console.log('No paper trades.'); return; }
+      const rows = trades.map(t => [
+        t.id, t.ticker, t.direction, t.instrument, t.size,
+        '$' + t.entry_price.toFixed(2),
+        t.exit_price ? '$' + t.exit_price.toFixed(2) : '-',
+        t.pnl ? '$' + t.pnl.toFixed(2) : 'OPEN',
+        t.setup_type, t.status
+      ]);
+      console.log('\n📝 PAPER TRADES');
+      const header = ['ID', 'Ticker', 'Dir', 'Inst', 'Qty', 'Entry', 'Exit', 'P&L', 'Setup', 'Status'];
+      const widths = header.map((h, i) => Math.max(h.length, ...rows.map(r => String(r[i]).length)));
+      const line = '+' + widths.map(w => '-'.repeat(w + 2)).join('+') + '+';
+      console.log(line);
+      console.log('| ' + header.map((h, i) => h.padEnd(widths[i])).join(' | ') + ' |');
+      console.log(line);
+      rows.forEach(r => console.log('| ' + r.map((c, i) => String(c).padEnd(widths[i])).join(' | ') + ' |'));
+      console.log(line);
+    } catch (error) {
+      console.error('❌ Error:', error.message);
+    }
+  });
+
 // Parse and execute
 program.version('1.0.0');
 program.parse();

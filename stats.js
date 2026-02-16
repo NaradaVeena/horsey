@@ -35,7 +35,7 @@ class HorseyStats {
     // Get all closed trades for the period
     const tradesQuery = `
       SELECT * FROM trades 
-      WHERE status = 'closed' ${dateFilter} ${tickerFilter}
+      WHERE status = 'closed' AND (is_paper = 0 OR is_paper IS NULL) ${dateFilter} ${tickerFilter}
       ORDER BY entry_time DESC
     `;
     
@@ -107,7 +107,7 @@ class HorseyStats {
   // Analyze performance by setup type
   async getSetupAnalysis(trades = null) {
     if (!trades) {
-      const tradesQuery = 'SELECT * FROM trades WHERE status = "closed"';
+      const tradesQuery = 'SELECT * FROM trades WHERE status = "closed" AND (is_paper = 0 OR is_paper IS NULL)';
       trades = await this.db.all(tradesQuery);
     }
 
@@ -188,7 +188,7 @@ class HorseyStats {
   async getStreaks() {
     const tradesQuery = `
       SELECT pnl FROM trades 
-      WHERE status = 'closed' 
+      WHERE status = 'closed' AND (is_paper = 0 OR is_paper IS NULL)
       ORDER BY entry_time DESC
     `;
     

@@ -274,20 +274,20 @@
         </div>
         <div class="header-stats">
             <div class="stat-item">
-                <div class="stat-value neutral mono">$0.00</div>
+                <div class="stat-value positive mono">$50.00</div>
                 <div class="stat-label">Today P&L</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value mono">0.0%</div>
+                <div class="stat-value mono">50.0%</div>
                 <div class="stat-label">Win Rate</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value mono">0</div>
+                <div class="stat-value mono">2</div>
                 <div class="stat-label">Open Positions</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value mono">0</div>
-                <div class="stat-label">none streak</div>
+                <div class="stat-value mono">1</div>
+                <div class="stat-label">loss streak</div>
             </div>
         </div>
     </div>
@@ -296,45 +296,255 @@
             
     <div class="card">
         <div class="card-header">📈 Today's Action</div>
-        <div class="empty-state">No open positions</div>
-        <div class="empty-state">No closed trades today</div>
+        
+      <div class="trade-row">
+        <div>
+          <div class="ticker">COIN</div>
+          <div class="setup-type">short 1x puts • fade</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="price mono">$1.33</div>
+          <span class="status-badge status-open">OPEN</span>
+        </div>
+      </div>
+    
+      <div class="trade-row">
+        <div>
+          <div class="ticker">RIVN</div>
+          <div class="setup-type">short 1x csp • csp</div>
+        </div>
+        <div style="text-align: right;">
+          <div class="price mono">$0.50</div>
+          <span class="status-badge status-open">OPEN</span>
+        </div>
+      </div>
+    
+        
+        <div class="trade-row">
+          <div>
+            <div class="ticker">MSFT</div>
+            <div class="setup-type">short 1x 0dte-puts • fade</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="pnl negative mono">$-85.00</div>
+            <span class="status-badge status-closed">CLOSED</span>
+          </div>
+        </div>
+      
+        <div class="trade-row">
+          <div>
+            <div class="ticker">MSFT</div>
+            <div class="setup-type">short 1x 0dte-puts • fade</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="pnl positive mono">$59.00</div>
+            <span class="status-badge status-closed">CLOSED</span>
+          </div>
+        </div>
+      
+        <div class="trade-row">
+          <div>
+            <div class="ticker">COST</div>
+            <div class="setup-type">long 1x calls • momentum</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="pnl positive mono">$89.00</div>
+            <span class="status-badge status-closed">CLOSED</span>
+          </div>
+        </div>
+      
+        <div class="trade-row">
+          <div>
+            <div class="ticker">COST</div>
+            <div class="setup-type">long 1x calls • momentum</div>
+          </div>
+          <div style="text-align: right;">
+            <div class="pnl negative mono">$-13.00</div>
+            <span class="status-badge status-closed">CLOSED</span>
+          </div>
+        </div>
+      
     </div>
             
     <div class="card">
         <div class="card-header">📊 Active Narratives</div>
-        <div class="empty-state">No active narratives</div>
+        
+        <div class="narrative-row">
+          <div>
+            <div class="ticker">GLD 🟢</div>
+            <div style="font-size: 12px; margin: 4px 0;">Consolidating in value area $435-470. Breakout above $469.51 targets $495-510. Breakdown below $435 is trouble. RSI 56, trend intact.</div>
+            <div class="levels">Levels: 435, 462, 469.51, 495</div>
+            <div class="levels">Invalid: 430</div>
+          </div>
+          <div>
+            <span class="status-badge status-active">ACTIVE</span>
+          </div>
+        </div>
+      
+        <div class="narrative-row">
+          <div>
+            <div class="ticker">SLV ⚪</div>
+            <div style="font-size: 12px; margin: 4px 0;">Below value area, testing $68.85 support. Reclaim $72 (50d) = back in play toward $82-86 value area. Break $64 = next leg down.</div>
+            <div class="levels">Levels: 64, 68.85, 72, 82</div>
+            <div class="levels">Invalid: 60</div>
+          </div>
+          <div>
+            <span class="status-badge status-active">ACTIVE</span>
+          </div>
+        </div>
+      
+        <div class="narrative-row">
+          <div>
+            <div class="ticker">COIN 🔴</div>
+            <div style="font-size: 12px; margin: 4px 0;">Rejected $170 resistance, lower highs forming. BTC testing $70K resistance — if rejected, COIN follows</div>
+            <div class="levels">Levels: 155, 164, 170</div>
+            <div class="levels">Invalid: 175</div>
+          </div>
+          <div>
+            <span class="status-badge status-active">ACTIVE</span>
+          </div>
+        </div>
+      
+        <div class="narrative-row">
+          <div>
+            <div class="ticker">COST 🟢</div>
+            <div style="font-size: 12px; margin: 4px 0;">Momentum continuation above $1000. Earnings run into Feb 20 WMT catalyst</div>
+            <div class="levels">Levels: 1000, 1014, 1025</div>
+            <div class="levels">Invalid: 995</div>
+          </div>
+          <div>
+            <span class="status-badge status-active">ACTIVE</span>
+          </div>
+        </div>
+      
+        <div class="narrative-row">
+          <div>
+            <div class="ticker">IWM 🟢</div>
+            <div style="font-size: 12px; margin: 4px 0;">Small cap squeeze above $265, broad market rotation from mega-cap to smalls</div>
+            <div class="levels">Levels: 260, 265, 270</div>
+            <div class="levels">Invalid: 258</div>
+          </div>
+          <div>
+            <span class="status-badge status-active">ACTIVE</span>
+          </div>
+        </div>
+      
+        <div class="narrative-row">
+          <div>
+            <div class="ticker">MSFT 🔴</div>
+            <div style="font-size: 12px; margin: 4px 0;">Break and retest $400 support — fail to recapture = short. Holding as support for now but watching for breakdown</div>
+            <div class="levels">Levels: 397, 400, 403</div>
+            <div class="levels">Invalid: 405</div>
+          </div>
+          <div>
+            <span class="status-badge status-active">ACTIVE</span>
+          </div>
+        </div>
+      
     </div>
             
     <div class="card">
         <div class="card-header">👀 Today's Watchlist</div>
-        <div class="empty-state">No watchlist items</div>
+        
+        <div class="watch-row">
+          <div>
+            <div class="ticker">AAPL 🔴 ⭐⭐⭐</div>
+            <div style="font-size: 12px; margin: 4px 0;">$252.5P — weak after -2.3% Fri, testing support</div>
+            <div class="levels">Levels: 250, 252.5, 255</div>
+            
+          </div>
+          <div>
+            <span class="status-badge status-watching">WATCHING</span>
+          </div>
+        </div>
+      
+        <div class="watch-row">
+          <div>
+            <div class="ticker">WMT 🟢 ⭐⭐⭐</div>
+            <div style="font-size: 12px; margin: 4px 0;">$135C — new 52wk high, earnings Thu</div>
+            <div class="levels">Levels: 133, 135, 137</div>
+            
+          </div>
+          <div>
+            <span class="status-badge status-watching">WATCHING</span>
+          </div>
+        </div>
+      
+        <div class="watch-row">
+          <div>
+            <div class="ticker">MSFT 🔴 ⭐⭐⭐</div>
+            <div style="font-size: 12px; margin: 4px 0;">Fade $400 rejection or short on break-and-fail</div>
+            <div class="levels">Levels: 395, 400, 403</div>
+            <div class="levels">Flow: Watch put flow at 395-400 strikes</div>
+          </div>
+          <div>
+            <span class="status-badge status-watching">WATCHING</span>
+          </div>
+        </div>
+      
+        <div class="watch-row">
+          <div>
+            <div class="ticker">ANET 🟢 ⭐⭐⭐</div>
+            <div style="font-size: 12px; margin: 4px 0;">$145C momentum — AI networking beneficiary</div>
+            <div class="levels">Levels: 140, 145, 150</div>
+            
+          </div>
+          <div>
+            <span class="status-badge status-watching">WATCHING</span>
+          </div>
+        </div>
+      
+        <div class="watch-row">
+          <div>
+            <div class="ticker">COST 🟢 ⭐⭐⭐</div>
+            <div style="font-size: 12px; margin: 4px 0;">$1025C continuation — WMT earnings Thu catalyst</div>
+            <div class="levels">Levels: 1010, 1025, 1040</div>
+            
+          </div>
+          <div>
+            <span class="status-badge status-watching">WATCHING</span>
+          </div>
+        </div>
+      
+        <div class="watch-row">
+          <div>
+            <div class="ticker">IWM 🟢 ⭐⭐⭐</div>
+            <div style="font-size: 12px; margin: 4px 0;">$265C small cap squeeze</div>
+            <div class="levels">Levels: 260, 265, 270</div>
+            
+          </div>
+          <div>
+            <span class="status-badge status-watching">WATCHING</span>
+          </div>
+        </div>
+      
     </div>
             
     <div class="card">
         <div class="card-header">🎯 Performance</div>
         <div class="perf-grid">
             <div class="perf-card">
-                <div class="perf-value mono">0</div>
+                <div class="perf-value mono">4</div>
                 <div class="perf-label">Total Trades</div>
             </div>
             <div class="perf-card">
-                <div class="perf-value mono negative">0.0%</div>
+                <div class="perf-value mono positive">50.0%</div>
                 <div class="perf-label">Win Rate</div>
             </div>
             <div class="perf-card">
-                <div class="perf-value mono negative">0.00</div>
+                <div class="perf-value mono positive">1.51</div>
                 <div class="perf-label">Profit Factor</div>
             </div>
             <div class="perf-card">
-                <div class="perf-value mono positive">$0.00</div>
+                <div class="perf-value mono positive">$50.00</div>
                 <div class="perf-label">Total P&L</div>
             </div>
             <div class="perf-card">
-                <div class="perf-value mono positive">$0.00</div>
+                <div class="perf-value mono positive">$74.00</div>
                 <div class="perf-label">Avg Winner</div>
             </div>
             <div class="perf-card">
-                <div class="perf-value mono negative">$0.00</div>
+                <div class="perf-value mono negative">$49.00</div>
                 <div class="perf-label">Avg Loser</div>
             </div>
         </div>
@@ -352,6 +562,7 @@
                         <th>Ticker</th>
                         <th>Direction</th>
                         <th>Instrument</th>
+                        <th>Qty</th>
                         <th>Entry</th>
                         <th>Exit</th>
                         <th>P&L</th>
@@ -360,7 +571,79 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td colspan="8" class="empty-state">No trades yet</td></tr>
+                    
+        <tr>
+          <td><span class="ticker">MSFT</span></td>
+          <td>short</td>
+          <td>0dte-puts</td>
+          <td class="mono">1</td>
+          <td class="mono">$1.30</td>
+          <td class="mono">$0.46</td>
+          <td class="mono negative">$-85.00</td>
+          <td class="setup-type">fade</td>
+          <td>2/14/2026</td>
+        </tr>
+      
+        <tr>
+          <td><span class="ticker">RIVN</span></td>
+          <td>short</td>
+          <td>csp</td>
+          <td class="mono">1</td>
+          <td class="mono">$0.50</td>
+          <td class="mono">-</td>
+          <td class="mono neutral">OPEN</td>
+          <td class="setup-type">csp</td>
+          <td>2/14/2026</td>
+        </tr>
+      
+        <tr>
+          <td><span class="ticker">COIN</span></td>
+          <td>short</td>
+          <td>puts</td>
+          <td class="mono">1</td>
+          <td class="mono">$1.33</td>
+          <td class="mono">-</td>
+          <td class="mono neutral">OPEN</td>
+          <td class="setup-type">fade</td>
+          <td>2/14/2026</td>
+        </tr>
+      
+        <tr>
+          <td><span class="ticker">MSFT</span></td>
+          <td>short</td>
+          <td>0dte-puts</td>
+          <td class="mono">1</td>
+          <td class="mono">$0.80</td>
+          <td class="mono">$1.40</td>
+          <td class="mono positive">$59.00</td>
+          <td class="setup-type">fade</td>
+          <td>2/14/2026</td>
+        </tr>
+      
+        <tr>
+          <td><span class="ticker">COST</span></td>
+          <td>long</td>
+          <td>calls</td>
+          <td class="mono">1</td>
+          <td class="mono">$2.85</td>
+          <td class="mono">$3.75</td>
+          <td class="mono positive">$89.00</td>
+          <td class="setup-type">momentum</td>
+          <td>2/14/2026</td>
+        </tr>
+      
+        <tr>
+          <td><span class="ticker">COST</span></td>
+          <td>long</td>
+          <td>calls</td>
+          <td class="mono">1</td>
+          <td class="mono">$2.40</td>
+          <td class="mono">$2.28</td>
+          <td class="mono negative">$-13.00</td>
+          <td class="setup-type">momentum</td>
+          <td>2/14/2026</td>
+        </tr>
+      
                 </tbody>
             </table>
         </div>
@@ -370,7 +653,7 @@
         <div class="card-header">📝 Journal</div>
         <div>
             <strong>Pre-market Plan:</strong>
-            <div class="journal-text">No plan set for today</div>
+            <div class="journal-text">Tuesday pre-market: 6 names on the board. MSFT $400 is the A+ setup — fade if it fails to recapture. COST/WMT momentum plays into WMT earnings Thu. IWM squeeze if broad market cooperates. AAPL weak — short if $252.5 breaks. ANET as AI sympathy play. 2 open swings: COIN $155P (bear), RIVN $15P CSP (neutral).</div>
         </div>
         <div style="margin-top: 16px;">
             <strong>Post-market Review:</strong>
@@ -394,12 +677,63 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td colspan="5" class="empty-state">No completed trades</td></tr>
+                    
+          <tr>
+            <td><span class="setup-type">MOMENTUM</span></td>
+            <td class="mono">2</td>
+            <td class="mono positive">50.0%</td>
+            <td class="mono positive">$76.00</td>
+            <td class="mono">$38.00</td>
+          </tr>
+        
+          <tr>
+            <td><span class="setup-type">FADE</span></td>
+            <td class="mono">2</td>
+            <td class="mono positive">50.0%</td>
+            <td class="mono negative">$-26.00</td>
+            <td class="mono">$-13.00</td>
+          </tr>
+        
                 </tbody>
             </table>
         </div>
     </div>
         </div>
+
+        
+    <div class="card" style="grid-column: 1 / -1;">
+        <div class="card-header">📝 PAPER TRADES — Execution Muscle</div>
+        <div style="display: flex; gap: 16px; margin-bottom: 14px; font-size: 0.85em; flex-wrap: wrap;">
+          <div style="background: #1a1f2e; padding: 6px 12px; border-radius: 6px;">
+            <span style="color: #888;">Total:</span> <span class="mono">1</span>
+            
+          </div>
+          
+          
+          
+          
+        </div>
+        
+        <div style="background: #1a1f2e; border: 1px solid #2a3040; border-radius: 8px; padding: 14px; margin-bottom: 10px; border-left: 3px solid #00ff88;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div>
+              <span class="ticker" style="font-size: 1.1em;">SPX</span>
+              <span style="color: #888; margin-left: 8px;">SHORT 1x 0dte-puts</span>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 1.1em;">🟢🟢</span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 20px; font-size: 0.85em; color: #aaa; margin-bottom: 6px;">
+            <span>Entry: <span class="mono">$0.75</span></span>
+            <span>Exit: <span class="mono">$5.10</span></span>
+            <span>Setup: fade</span>
+            <span>2/14/2026</span>
+          </div>
+          <div style="font-size: 0.85em; color: #ccc; margin-top: 6px; padding: 6px 8px; background: #141820; border-radius: 4px;">7x move. Right read, didn't pull trigger. Rules are rules.</div>
+          
+        </div>
+    </div>
         
         
     <div class="nav">

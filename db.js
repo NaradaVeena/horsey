@@ -289,13 +289,16 @@ class HorseyDB {
 
   // Trade operations
   async openTrade(ticker, direction, instrument, entryPrice, size, options = {}) {
-    const costBasis = entryPrice * size;
+    // Options contracts = 100 shares per contract
+    const multiplier = ['shares'].includes(instrument) ? 1 : 100;
+    const COMMISSION = 1.00; // $1 fixed round-trip fee, subtracted at entry
+    const costBasis = (entryPrice * size * multiplier) + COMMISSION;
     
     const sql = `
       INSERT INTO trades (
         ticker, direction, instrument, entry_price, size, cost_basis,
-        setup_type, narrative_id, watchlist_id, planned_risk, planned_target, notes
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        setup_type, narrative_id, watchlist_id, planned_risk, planned_target, notes, is_paper
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     
     const result = await this.run(sql, [
@@ -310,7 +313,8 @@ class HorseyDB {
       options.watchlist || null,
       options.risk || null,
       options.target || null,
-      options.notes || null
+      options.notes || null,
+      options.paper ? 1 : 0
     ]);
     
     return result.lastID;
@@ -322,7 +326,10 @@ class HorseyDB {
       throw new Error(`Trade ${id} not found`);
     }
 
-    const proceeds = exitPrice * trade.size;
+    // Options contracts = 100 shares per contract
+    // Commission already included in cost_basis at entry
+    const multiplier = ['shares'].includes(trade.instrument) ? 1 : 100;
+    const proceeds = exitPrice * trade.size * multiplier;
     const pnl = proceeds - trade.cost_basis;
     const pnlPct = (pnl / trade.cost_basis) * 100;
     
@@ -350,6 +357,13 @@ class HorseyDB {
   async getTrades(filters = {}) {
     let query = 'SELECT * FROM trades WHERE 1=1';
     const params = [];
+
+    // Filter paper vs real trades
+    if (filters.paper) {
+      query += ' AND is_paper = 1';
+    } else if (!filters.includePaper) {
+      query += ' AND (is_paper = 0 OR is_paper IS NULL)';
+    }
 
     if (filters.open) {
       query += ' AND status = ?';
